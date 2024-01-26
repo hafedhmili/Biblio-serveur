@@ -1,33 +1,31 @@
-from ca.uqam.info.mgl7760.tp1.domain.livre import Livre
-
-
-class Auteur:
+from livre import Livre
+class Editeur:
 
     # liste indexée d'auteurs
-    AUTEURS = dict()
+    EDITEURS = dict()
 
     def __init__(self,id : str, nom:str):
         self.id = id
         self.nom = nom
         self.livres = list()
-        Auteur.AUTEURS[id] = self
+        Editeur.EDITEURS[id] = self
 
 
+    def ajouter_livre(self,livre: Livre):
+        self.livres.append(livre)
+
+        
     @classmethod
     def chercher_par_id(cls, an_id : str):
-        return cls.AUTEURS[an_id]
+        return cls.EDITEURS[an_id]
     
     # returns the first element of the dictionary that has the 
     # name passed as argument
     @classmethod
     def chercher_par_nom(cls,un_nom: str):
-        for auteur in cls.AUTEURS.values():
-            if (auteur.nom == un_nom):
-                return auteur
-            
-
-    def ajouter_livre(self, livre: Livre):
-        self.livres.append(livre)
+        for editeur in cls.EDITEURS.values():
+            if (editeur.nom == un_nom):
+                return editeur
 
         
 
