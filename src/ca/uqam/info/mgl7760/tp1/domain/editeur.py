@@ -1,4 +1,8 @@
-from livre import Livre
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING: 
+    from ca.uqam.info.mgl7760.tp1.domain.livre import Livre
+    
 class Editeur:
 
     # liste indexée d'auteurs

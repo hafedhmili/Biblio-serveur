@@ -1,6 +1,6 @@
-from auteur import Auteur
-from editeur import Editeur
-from categorie import Categorie
+from ca.uqam.info.mgl7760.tp1.domain.auteur import Auteur
+from ca.uqam.info.mgl7760.tp1.domain.editeur import Editeur
+from ca.uqam.info.mgl7760.tp1.domain.categorie import Categorie
 
 class Livre:
 
