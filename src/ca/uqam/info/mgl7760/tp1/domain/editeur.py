@@ -1,18 +1,22 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
+from typing import List
+from ca.uqam.info.mgl7760.tp1.domain.basebiblio import BaseBiblio
+
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
+
 if TYPE_CHECKING: 
     from ca.uqam.info.mgl7760.tp1.domain.livre import Livre
     
-class Editeur:
+class Editeur(BaseBiblio):
 
-    # liste indexée d'auteurs
-    EDITEURS = dict()
+    __tablename__="table_editeurs"
 
-    def __init__(self,id : str, nom:str):
-        self.id = id
-        self.nom = nom
-        self.livres = list()
-        Editeur.EDITEURS[id] = self
+    nom: Mapped[str] = mapped_column(String(30),primary_key=True)
+    livres: Mapped[List["Livre"]] = relationship(back_populates="Editeur")
 
 
     def ajouter_livre(self,livre: Livre):
@@ -21,15 +25,13 @@ class Editeur:
         
     @classmethod
     def chercher_par_id(cls, an_id : str):
-        return cls.EDITEURS[an_id]
+        # write based on SQLAlchemy
+        pass
     
-    # returns the first element of the dictionary that has the 
-    # name passed as argument
     @classmethod
     def chercher_par_nom(cls,un_nom: str):
-        for editeur in cls.EDITEURS.values():
-            if (editeur.nom == un_nom):
-                return editeur
+        # write based on SQLAlchemy
+        pass
 
         
 

@@ -1,0 +1,1 @@
+python3 -m flask --app src/ca/uqam/info/mgl7760/tp1/app/app.py run
