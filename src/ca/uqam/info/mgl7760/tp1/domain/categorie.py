@@ -13,10 +13,11 @@ if TYPE_CHECKING:
     
 class Categorie(BaseBiblio):
 
-    __tablename__="table_categorie"
+    __tablename__="table_categories"
+    __table_args__ = {"schema": "biblio"}
 
     nom: Mapped[str] = mapped_column(String(30),primary_key=True)
-    livres: Mapped[List["Livre"]] = relationship(back_populates="Categorie")
+    livres: Mapped[List["Livre"]] = relationship(back_populates="categories")
 
 
     @classmethod

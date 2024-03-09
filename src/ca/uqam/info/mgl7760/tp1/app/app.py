@@ -1,22 +1,19 @@
 from flask import Flask
 from flask_cors import CORS, cross_origin
-from ca.uqam.info.mgl7760.tp1.domain.livre import Livre
-from ca.uqam.info.mgl7760.tp1.domain.basebiblio import BaseBiblio
-from markupsafe import escape
 from sqlalchemy import create_engine
+from ca.uqam.info.mgl7760.tp1.domain.basebiblio import BaseBiblio
+from ca.uqam.info.mgl7760.tp1.domain.livre import Livre
+from ca.uqam.info.mgl7760.tp1.app.orm import init_system, load_data
+from markupsafe import escape
 
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
+# create an engine
 
-def init_system():
-    # create an engine
-    engine = create_engine("postgresql://localhost:5432", echo=True)
-    print("Starting Flask server")
-    BaseBiblio.metadata.create_all(engine)
-    
-init_system()
-print("hello world from Flask")
+engine = init_system()
+load_data(engine)
+print("hello world from Flask. Just created two users and saved them")
 
 
 

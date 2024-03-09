@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from ca.uqam.info.mgl7760.tp1.domain.basebiblio import BaseBiblio
+from ca.uqam.info.mgl7760.tp1.domain.basebiblio import BaseBiblio, table_auteur_livre
 from typing import List
 from typing import Optional
 from sqlalchemy import String
@@ -15,15 +15,11 @@ if TYPE_CHECKING:
 class Auteur(BaseBiblio):
 
     __tablename__ = "table_auteurs"
+    __table_args__ = {"schema": "biblio"}
+ 
+    nom: Mapped[str] = mapped_column(String(30), primary_key=True)
+    livres: Mapped[List["Livre"]] = relationship(back_populates="auteurs",secondary=table_auteur_livre)
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    nom: Mapped[str] = mapped_column(String(30))
-    livres: Mapped[List["Livre"]] = relationship(back_populates="auteurs")
-
-
-    @classmethod
-    def chercher_par_id(cls, an_id : str):
-        pass
     
     # returns the first element of the dictionary that has the 
     # name passed as argument

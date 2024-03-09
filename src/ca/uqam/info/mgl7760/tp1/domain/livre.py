@@ -2,76 +2,85 @@ from ca.uqam.info.mgl7760.tp1.domain.auteur import Auteur
 from ca.uqam.info.mgl7760.tp1.domain.editeur import Editeur
 from ca.uqam.info.mgl7760.tp1.domain.categorie import Categorie
 
-class Livre:
+from typing import List
+from ca.uqam.info.mgl7760.tp1.domain.basebiblio import BaseBiblio, table_auteur_livre, table_categorie_livre
 
-    LIVRES_PAR_ID = dict()
-    LIVRES_PAR_ISBN = dict()
-    LIVRES_PAR_TITRE = dict()
+from sqlalchemy import ForeignKey, String
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
 
-    def __init__(self, id: str, titre: str, description:str, isbn: str, annee: int, nom_editeur: str):
-        # id
-        self.id = id
-        Livre.LIVRES_PAR_ID[id] = self
 
-        # titre
-        self.titre = titre
-        Livre.LIVRES_PAR_TITRE[titre] = self
+class Livre(BaseBiblio):
 
-        self.description = description
+    __tablename__ = "table_livres"
+    __table_args__ = {"schema": "biblio"}
+    id: Mapped[int] = mapped_column(primary_key=True)
+    titre: Mapped[str] = mapped_column(String(30),nullable=False)
+    description: Mapped[str] = mapped_column(String(80))
+    isbn: Mapped[str] = mapped_column(String(18),nullable=False, unique=True)
+    annee: Mapped[int] = mapped_column(nullable=False)
 
-        # isbn
-        self.isbn = isbn
-        Livre.LIVRES_PAR_ISBN[isbn] = self
-        self.annee = annee
+    auteurs: Mapped[List["Auteur"]] = relationship(back_populates="livres",secondary=table_auteur_livre)
 
-        # editeur
-        self.editeur = Editeur.chercher_par_nom(nom_editeur)
-        self.editeur.ajouter_livre(self)
+    categories: Mapped[List["Categorie"]] = relationship(back_populates="livres", secondary=table_categorie_livre)
 
-        self.auteurs = list()
-        self.categories = list()
+    editeur_id: Mapped[str] = mapped_column(ForeignKey("table_editeurs.nom"))
+                                                
+    editeur: Mapped["Editeur"] = relationship(back_populates="livres")
 
+    
     def ajoute_auteur(self, nom_auteur: str):
         auteur = Auteur.chercher_par_nom(nom_auteur)
+        # the following will add in both directions because
+        # of the way the attribute/column was defined
+        # (relationship, with a back_propagates property)
         self.auteurs.append(auteur)
-        auteur.ajouter_livre(self)
-
+       
     def ajouter_categorie(self, code_categorie: str):
         categorie =  Categorie.chercher_par_code(code_categorie)
+        # the following will add in both directions because
+        # of the way the attribute/column was defined
+        # (relationship, with a back_propagates property)
         self.categories.append(categorie)
-        categorie.ajouter_livre(self)
-
 
     def set_image_couverture(self,nom_fichier_image:str):
         self.fichier_image = nom_fichier_image
 
 
     @classmethod
-    def charger_par_id(cls,id: str):
-        return cls.LIVRES_PAR_ID[id]
+    def cherger_par_id(cls,id: int):
+        # define later with SQLAlchemy functionality
+        pass
     
 
     @classmethod
     def chercher_par_isbn(cls, isbn: str):
-        return cls.LIVRES_PAR_ISBN[isbn]
+        # define later with SQLAlchemy functionality
+        pass
 
     @classmethod
     def chercher_par_titre(cls,titre: str):
-        return cls.LIVRES_PAR_TITRE[titre]
+        # define later with SQLAlchemy functionality
+        pass
     
     @classmethod
     def chercher_par_auteur(cls,nom_auteur: str):
-        return Auteur.chercher_par_nom(nom_auteur).livres
+        # define later with SQLAlchemy functionality
+        pass
     
     @classmethod
     def chercher_par_editeur(cls, nom_editeur: str):
-        return Editeur.chercher_par_nom(nom_editeur).livres
+        # define later with SQLAlchemy functionality
+        pass
     
     @classmethod
     def chercher_par_categorie(cls, code_categorie: str):
-        return Categorie.chercher_par_code(code_categorie).livres
+        # define later with SQLAlchemy functionality
+        pass
     
 
     @classmethod
     def chercher_tous(cls):
-        return cls.LIVRES_PAR_ID.values()
+        # define later with SQLAlchemy functionality
+        pass
