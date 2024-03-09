@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 from typing import List
-from ca.uqam.info.mgl7760.tp1.domain.basebiblio import BaseBiblio
+from ca.uqam.info.mgl7760.tp1.domain.basebiblio import BaseBiblio, table_categorie_livre
 
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped
@@ -17,7 +17,7 @@ class Categorie(BaseBiblio):
     __table_args__ = {"schema": "biblio"}
 
     nom: Mapped[str] = mapped_column(String(30),primary_key=True)
-    livres: Mapped[List["Livre"]] = relationship(back_populates="categories")
+    livres: Mapped[List["Livre"]] = relationship(back_populates="categories",secondary=table_categorie_livre)
 
 
     @classmethod

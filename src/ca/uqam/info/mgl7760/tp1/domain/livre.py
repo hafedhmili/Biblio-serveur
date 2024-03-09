@@ -25,7 +25,7 @@ class Livre(BaseBiblio):
 
     categories: Mapped[List["Categorie"]] = relationship(back_populates="livres", secondary=table_categorie_livre)
 
-    editeur_id: Mapped[str] = mapped_column(ForeignKey("table_editeurs.nom"))
+    editeur_id: Mapped[str] = mapped_column(String(30),ForeignKey("table_editeurs.nom"))
                                                 
     editeur: Mapped["Editeur"] = relationship(back_populates="livres")
 
