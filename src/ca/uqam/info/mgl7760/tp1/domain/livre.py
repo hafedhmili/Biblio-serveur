@@ -16,7 +16,7 @@ class Livre(BaseBiblio):
     __tablename__ = "table_livres"
     __table_args__ = {"schema": "biblio"}
     id: Mapped[int] = mapped_column(primary_key=True)
-    titre: Mapped[str] = mapped_column(String(30),nullable=False)
+    titre: Mapped[str] = mapped_column(String(80),nullable=False)
     description: Mapped[str] = mapped_column(String(80))
     isbn: Mapped[str] = mapped_column(String(18),nullable=False, unique=True)
     annee: Mapped[int] = mapped_column(nullable=False)
@@ -30,18 +30,10 @@ class Livre(BaseBiblio):
     editeur: Mapped["Editeur"] = relationship(back_populates="livres")
 
     
-    def ajoute_auteur(self, nom_auteur: str):
-        auteur = Auteur.chercher_par_nom(nom_auteur)
-        # the following will add in both directions because
-        # of the way the attribute/column was defined
-        # (relationship, with a back_propagates property)
+    def ajoute_auteur(self, auteur: Auteur):
         self.auteurs.append(auteur)
        
-    def ajouter_categorie(self, code_categorie: str):
-        categorie =  Categorie.chercher_par_code(code_categorie)
-        # the following will add in both directions because
-        # of the way the attribute/column was defined
-        # (relationship, with a back_propagates property)
+    def ajouter_categorie(self, categorie: Categorie):
         self.categories.append(categorie)
 
     def set_image_couverture(self,nom_fichier_image:str):
@@ -49,7 +41,7 @@ class Livre(BaseBiblio):
 
 
     @classmethod
-    def cherger_par_id(cls,id: int):
+    def chercher_par_id(cls,id: int):
         # define later with SQLAlchemy functionality
         pass
     
