@@ -5,8 +5,8 @@ from ca.uqam.info.mgl7760.tp1.domain.categorie import Categorie
 from typing import List
 from ca.uqam.info.mgl7760.tp1.domain.basebiblio import BaseBiblio, table_auteur_livre, table_categorie_livre
 
-from sqlalchemy import ForeignKey, String
-from sqlalchemy.orm import Mapped
+from sqlalchemy import ForeignKey, String, select
+from sqlalchemy.orm import Mapped, Session
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 
@@ -41,38 +41,39 @@ class Livre(BaseBiblio):
 
 
     @classmethod
-    def chercher_par_id(cls,id: int):
+    def chercher_par_id(cls,id: int, session: Session):
         # define later with SQLAlchemy functionality
         pass
     
 
     @classmethod
-    def chercher_par_isbn(cls, isbn: str):
+    def chercher_par_isbn(cls, isbn: str, session: Session):
         # define later with SQLAlchemy functionality
         pass
 
     @classmethod
-    def chercher_par_titre(cls,titre: str):
+    def chercher_par_titre(cls,titre: str, session: Session):
         # define later with SQLAlchemy functionality
         pass
     
     @classmethod
-    def chercher_par_auteur(cls,nom_auteur: str):
+    def chercher_par_auteur(cls,nom_auteur: str, session: Session):
         # define later with SQLAlchemy functionality
         pass
     
     @classmethod
-    def chercher_par_editeur(cls, nom_editeur: str):
+    def chercher_par_editeur(cls, nom_editeur: str, session: Session):
         # define later with SQLAlchemy functionality
         pass
     
     @classmethod
-    def chercher_par_categorie(cls, code_categorie: str):
+    def chercher_par_categorie(cls, code_categorie: str, session: Session):
         # define later with SQLAlchemy functionality
         pass
     
 
     @classmethod
-    def chercher_tous(cls):
+    def chercher_tous(cls, session: Session):
         # define later with SQLAlchemy functionality
-        pass
+        statement = select(Livre)
+        return session.execute(statement).all()

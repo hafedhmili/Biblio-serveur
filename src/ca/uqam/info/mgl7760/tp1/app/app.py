@@ -87,16 +87,25 @@ def hello(name):
 @cross_origin()
 def get_livres():
     print("Hey, I got called")
-    chaine = "<H1>Liste de Tous Les Livres</H1>"
-    chaine = chaine + "<br><b>Titre (Année de parution)<tab>Auteurs</b></br>"
-    livres = Livre.chercher_tous()
-    for livre in livres:
-        chaine = chaine + livre.titre + "(" + livre.annee + ")"
-
+    chaine = "<H1>Liste de Tous Les Livres</H1><br>"
+    chaine = chaine + "<table><tr><th>Titre</th><th>Année de parution</th><th>Editeur</th><th>ISBN</th><br>"
+    engine = get_engine()
+    with Session(engine) as session:
+        listes_livres = Livre.chercher_tous(session)
+        for liste_livres in listes_livres:
+            livre = liste_livres[0]
+            print(livre.titre)
+            chaine = chaine + "<tr><td>"+livre.titre + "</td><td>" + str(livre.annee)+ "</td><td>" + str(livre.editeur.nom)+"</td><td>" + str(livre.isbn) + "</td></tr>"
+        session.close()
+    chaine = chaine+ "</table>"
+    print(chaine)
     return chaine
 
 # create an engine
 
+def get_engine():
+    return engine
+#load_data(engine,file_name)
+
 engine = init_system()
-load_data(engine,file_name)
 print("hello world from Flask. Just created two users and saved them")
