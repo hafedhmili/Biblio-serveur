@@ -9,8 +9,7 @@ from markupsafe import escape
 import csv
 
 app = Flask(__name__)
-cors = CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type'
+cors = CORS(app, resources={"*": {"origins": "*"}})
 file_name = './data/biblio.csv'
 
 
@@ -74,19 +73,21 @@ def load_data(engine, csvfile_path):
 
 
 @app.route("/")
-@cross_origin()
+@cross_origin(origin='*',headers=['Content-Type','Authorization'])
 def hello_world():
+    response = Flask.jsonify({'messge':'Hello world'})
+    response.headers.add
     return "<p>Hello, World!</p>"
 
 @app.route("/<name>")
-@cross_origin()
+@cross_origin(origin='*',headers=['Content-Type','Authorization'])
 def hello(name):
     return f"Hello, {escape(name)}!"
 
-@app.route("/livres")
-@cross_origin()
-def get_livres():
-    print("Hey, I got called")
+@app.route("/livres_html")
+@cross_origin(origin='*',headers=['Content-Type','Authorization'])
+def get_table_html_livres():
+    print("Hey, I got called to return an HTML table")
     chaine = "<H1>Liste de Tous Les Livres</H1><br>"
     chaine = chaine + "<table><tr><th>Titre</th><th>Année de parution</th><th>Editeur</th><th>ISBN</th><br>"
     engine = get_engine()
@@ -98,9 +99,24 @@ def get_livres():
             chaine = chaine + "<tr><td>"+livre.titre + "</td><td>" + str(livre.annee)+ "</td><td>" + str(livre.editeur.nom)+"</td><td>" + str(livre.isbn) + "</td></tr>"
         session.close()
     chaine = chaine+ "</table>"
-    print(chaine)
+    #print(chaine)
     return chaine
 
+@app.route("/livres")
+@cross_origin(origin='*',headers=['Content-Type','Authorization'])
+def get_liste_tous_livres():
+    print("Hey, I got called to return a list of books")
+    engine = get_engine()
+    liste = []
+    with Session(engine) as session:
+        liste_livres = Livre.chercher_tous(session)
+        for element_livre in liste_livres:
+            livre = element_livre[0]
+            liste_livre = [livre.titre,livre.annee,livre.editeur.nom,livre.isbn]
+            liste.append(liste_livre)
+        session.close()
+    print(liste)
+    return liste
 # create an engine
 
 def get_engine():
