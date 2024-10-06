@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  tp1mgl7760:
+    image: tp1mgl7760
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: ["sh", "-c", "pip install debugpy -t /tmp && python /tmp/debugpy --wait-for-client --listen 0.0.0.0:5678 -m flask run --no-debugger --no-reload --host 0.0.0.0 --port 5000"]
+    ports:
+      - 5000:5000
+      - 5678:5678
+    environment:
+      - FLASK_APP=src/ca/uqam/info/mgl7760/tp1/app/app.py

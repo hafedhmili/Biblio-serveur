@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  tp1mgl7760:
+    image: tp1mgl7760
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 5000:5000
